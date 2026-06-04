@@ -1,0 +1,386 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/><title>UBrush Tiled iPad 3</title><link rel="manifest" href="manifest.json"/><meta name="theme-color" content="#20211f"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><link rel="apple-touch-icon" href="icon.svg"/><style>* { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #20211f;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+    #app {
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      color: #f4f0e8;
+    }
+    .ub-ipad-app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #20211f;
+    }
+    .ub-topbar {
+      position: absolute;
+      z-index: 20;
+      top: calc(env(safe-area-inset-top, 0px) + 10px);
+      left: 14px;
+      right: 14px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 24px;
+      background: rgba(31,32,30,.78);
+      backdrop-filter: blur(22px);
+      box-shadow: 0 12px 34px rgba(0,0,0,.24);
+    }
+    .ub-topbar label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #d9d1c2;
+      font: 700 12px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      white-space: nowrap;
+    }
+    .ub-topbar select,
+    .ub-topbar button,
+    .ub-topbar input[type="color"] {
+      height: 34px;
+      border: 0;
+      color: #f6f2ea;
+      background: rgba(255,255,255,.1);
+      border-radius: 17px;
+      font: 700 13px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ub-topbar select {
+      min-width: 106px;
+      max-width: min(360px, 38vw);
+      padding: 0 30px 0 12px;
+    }
+    #brush {
+      min-width: min(380px, 42vw);
+    }
+    .ub-topbar button {
+      min-width: 34px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+    .ub-topbar button:active {
+      background: rgba(255,255,255,.22);
+    }
+    .ub-topbar button:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+    .ub-view-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 0 0 auto;
+    }
+    .ub-view-controls button {
+      min-width: 34px;
+      padding: 0 10px;
+    }
+    .ub-topbar input[type="color"] {
+      width: 34px;
+      padding: 2px;
+      border: 2px solid rgba(255,255,255,.72);
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .ub-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .ub-floating-controls {
+      position: absolute;
+      z-index: 15;
+      left: 18px;
+      top: 110px;
+      bottom: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .ub-floating-slider {
+      width: 48px;
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      background: rgba(31,32,30,.58);
+      backdrop-filter: blur(18px);
+      color: #efe7da;
+      pointer-events: auto;
+      font: 700 11px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+    .ub-floating-slider input {
+      width: 174px;
+      transform: rotate(-90deg);
+      margin: 66px 0;
+      accent-color: #f0c96a;
+    }
+    .ub-layer-panel {
+      position: absolute;
+      z-index: 18;
+      top: calc(env(safe-area-inset-top, 0px) + 72px);
+      right: 14px;
+      bottom: 18px;
+      width: min(310px, 34vw);
+      min-width: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 24px;
+      background: rgba(31,32,30,.78);
+      backdrop-filter: blur(22px);
+      box-shadow: 0 12px 34px rgba(0,0,0,.24);
+      color: #f4f0e8;
+      pointer-events: auto;
+    }
+    .ub-layer-panel.is-hidden {
+      display: none;
+    }
+    .ub-layer-actions,
+    .ub-layer-properties {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .ub-layer-actions button,
+    .ub-layer-properties button,
+    .ub-layer-properties select,
+    .ub-layer-name {
+      height: 34px;
+      border: 0;
+      border-radius: 17px;
+      color: #f6f2ea;
+      background: rgba(255,255,255,.1);
+      font: 700 12px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      touch-action: manipulation;
+    }
+    .ub-layer-actions button,
+    .ub-layer-properties button {
+      min-width: 34px;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+    .ub-layer-actions button:disabled,
+    .ub-layer-properties button:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+    .ub-layer-name {
+      width: 100%;
+      padding: 0 12px;
+    }
+    .ub-layer-properties select {
+      min-width: 92px;
+      flex: 1 1 100px;
+      padding: 0 24px 0 10px;
+    }
+    .ub-layer-opacity {
+      width: 100%;
+      accent-color: #f0c96a;
+    }
+    .ub-layer-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 2px;
+    }
+    .ub-layer-row {
+      display: grid;
+      grid-template-columns: 34px 30px 30px minmax(0, 1fr) 30px;
+      align-items: center;
+      gap: 6px;
+      min-height: 42px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 19px;
+      background: rgba(255,255,255,.07);
+      color: #f4f0e8;
+      cursor: pointer;
+    }
+    .ub-layer-row.is-active {
+      border-color: rgba(240,201,106,.85);
+      background: rgba(240,201,106,.18);
+    }
+    .ub-layer-row button {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 15px;
+      color: #f6f2ea;
+      background: rgba(255,255,255,.1);
+      font: 700 11px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+    .ub-layer-thumbnail {
+      position: static;
+      inset: auto;
+      display: block;
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px;
+      background: #d6cec2;
+      touch-action: manipulation;
+    }
+    .ub-layer-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font: 700 12px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+    .ub-layer-cache {
+      min-height: 18px;
+      color: #cabfaa;
+      font: 700 10px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+    #gl {
+      cursor: crosshair;
+    }
+    #grid {
+      pointer-events: none;
+    }
+    .ub-shape-assist-ribbon {
+      position: absolute;
+      z-index: 25;
+      left: 50%;
+      top: calc(env(safe-area-inset-top, 0px) + 68px);
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      max-width: calc(100vw - 28px);
+      overflow-x: auto;
+      padding: 6px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      background: rgba(31,32,30,.82);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 12px 34px rgba(0,0,0,.24);
+      pointer-events: auto;
+    }
+    .ub-shape-assist-ribbon button {
+      flex: 0 0 auto;
+      height: 32px;
+      border: 0;
+      border-radius: 16px;
+      background: rgba(255,255,255,.1);
+      color: #f6f0e7;
+      padding: 0 12px;
+      font: 750 12px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      touch-action: manipulation;
+    }
+    .ub-shape-assist-ribbon button.active {
+      background: #f0c96a;
+      color: #1f201e;
+    }
+    .ub-shape-assist-ribbon button.done {
+      background: rgba(255,255,255,.2);
+    }
+    .ub-shape-assist-handles {
+      position: absolute;
+      z-index: 24;
+      inset: 0;
+      pointer-events: none;
+    }
+    .ub-shape-assist-handle {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      margin-left: -9px;
+      margin-top: -9px;
+      border-radius: 50%;
+      background: #4a90d9;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,.32);
+      pointer-events: auto;
+      touch-action: none;
+      cursor: grab;
+    }
+    .ub-shape-assist-handle.control {
+      background: #f1b84a;
+    }
+    .ub-shape-assist-handle.anchor {
+      background: #5ad18d;
+    }
+    .ub-shape-assist-handle.center {
+      width: 20px;
+      height: 20px;
+      margin-left: -10px;
+      margin-top: -10px;
+      background: #f05a7e;
+    }
+    @media (max-width: 900px) {
+      .ub-topbar {
+        left: 8px;
+        right: 8px;
+        gap: 5px;
+        overflow-x: auto;
+      }
+      .ub-topbar label,
+      .ub-topbar button {
+        flex: 0 0 auto;
+      }
+      #brush {
+        min-width: 240px;
+        max-width: 48vw;
+      }
+      .ub-floating-controls {
+        left: 10px;
+        top: 92px;
+        bottom: 20px;
+      }
+      .ub-floating-slider {
+        width: 42px;
+        min-height: 180px;
+      }
+      .ub-floating-slider input {
+        width: 142px;
+        margin: 50px 0;
+      }
+      .ub-layer-panel {
+        top: auto;
+        left: 8px;
+        right: 8px;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+        width: auto;
+        height: 210px;
+        min-width: 0;
+      }
+    }</style><script defer="defer" src="tiledIpad3.bundle.js"></script></head><body><div id="app"><main class="ub-ipad-app"><section class="ub-stage"><canvas id="gl"></canvas><canvas id="grid"></canvas></section><nav class="ub-topbar" aria-label="Tiled iPad 3 controls"><button id="undo" type="button" disabled="disabled">undo</button> <button id="redo" type="button" disabled="disabled">redo</button> <button id="layer-toggle" type="button">layers on</button><div class="ub-view-controls" aria-label="View controls"><button id="view-zoom-out" type="button">-</button> <button id="view-zoom-in" type="button">+</button> <button id="view-pan-left" type="button">&lt;</button> <button id="view-pan-right" type="button">&gt;</button> <button id="view-pan-up" type="button">^</button> <button id="view-pan-down" type="button">v</button> <button id="view-rotate-left" type="button">r-</button> <button id="view-rotate-right" type="button">r+</button> <button id="view-fit" type="button">fit</button></div><label>brush <select id="brush"></select></label> <label>tiles <select id="tile-count"><option value="1">1</option><option value="4">4</option><option value="9">9</option><option value="16" selected="selected">16</option><option value="64">64</option><option value="256">256</option></select></label> <label>color <input id="color" type="color" value="#1f1f1f"></label> <button id="dry" type="button">dry</button> <button id="debug-tile" type="button">debug off</button> <button id="clear" type="button">clear</button></nav><aside class="ub-floating-controls" aria-label="Brush controls"><label class="ub-floating-slider">size <input id="brush-size" type="range" min="0" max="0.5" step="0.001" value="0.14"></label> <label class="ub-floating-slider">opacity <input id="brush-opacity" type="range" min="0" max="1" step="0.01" value="1"></label></aside><aside id="layer-panel" class="ub-layer-panel" aria-label="Layer controls"><div class="ub-layer-actions"><button id="layer-add" type="button">+</button> <button id="layer-duplicate" type="button">dup</button> <button id="layer-delete" type="button">del</button> <button id="layer-up" type="button">up</button> <button id="layer-down" type="button">down</button></div><input id="layer-name" class="ub-layer-name" value="Layer 1"><div class="ub-layer-properties"><button id="layer-visible" type="button">show</button> <button id="layer-lock" type="button">lock</button> <button id="layer-alpha-lock" type="button">alpha</button> <select id="layer-blend"><option value="normal">normal</option><option value="multiply">multiply</option><option value="screen">screen</option><option value="add">add</option><option value="max">max</option></select></div><input id="layer-opacity" class="ub-layer-opacity" type="range" min="0" max="1" step="0.01" value="1"><div id="layer-list" class="ub-layer-list"></div><div id="layer-cache" class="ub-layer-cache"></div></aside></main></div></body></html>
