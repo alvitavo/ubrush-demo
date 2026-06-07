@@ -97,7 +97,7 @@
       z-index: 15;
       left: 18px;
       top: 110px;
-      bottom: 34px;
+      bottom: 96px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -124,6 +124,29 @@
       transform: rotate(-90deg);
       margin: 66px 0;
       accent-color: #f0c96a;
+    }
+    .ub-fit-button {
+      position: absolute;
+      z-index: 16;
+      left: 18px;
+      bottom: 34px;
+      min-width: 48px;
+      min-height: 42px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 18px;
+      background: rgba(31,32,30,.72);
+      color: #efe7da;
+      backdrop-filter: blur(18px);
+      font: 800 12px -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+    .ub-fit-button:active {
+      transform: translateY(1px);
+      background: rgba(63,64,60,.78);
+    }
+    .ub-fit-button.hidden {
+      display: none;
     }
     .ub-layer-panel {
       position: absolute;
@@ -390,7 +413,7 @@
       .ub-floating-controls {
         left: 10px;
         top: 92px;
-        bottom: 20px;
+        bottom: 78px;
       }
       .ub-floating-slider {
         width: 42px;
@@ -399,6 +422,10 @@
       .ub-floating-slider input {
         width: 142px;
         margin: 50px 0;
+      }
+      .ub-fit-button {
+        left: 10px;
+        bottom: 20px;
       }
       .ub-layer-panel {
         top: auto;
@@ -409,4 +436,4 @@
         height: 210px;
         min-width: 0;
       }
-    }</style><script defer="defer" src="tiledIpad3.bundle.js"></script></head><body><div id="app"><main class="ub-ipad-app"><section class="ub-stage"><canvas id="gl"></canvas><canvas id="grid"></canvas></section><div id="stats-panel" class="ub-stats-panel"></div><nav class="ub-topbar" aria-label="Tiled iPad 3 controls"><button id="undo" type="button" disabled="disabled">undo</button> <button id="redo" type="button" disabled="disabled">redo</button> <button id="layer-toggle" type="button">layers on</button> <button id="fill-mode" type="button">fill off</button> <label>brush <select id="brush"></select></label> <label>tiles <select id="tile-count"><option value="1">1</option><option value="4">4</option><option value="9">9</option><option value="16" selected="selected">16</option><option value="64">64</option><option value="256">256</option></select></label> <label>color <input id="color" type="color" value="#1f1f1f"></label> <button id="dry" type="button">dry</button> <button id="debug-tile" type="button">debug off</button> <button id="clear" type="button">clear</button></nav><aside class="ub-floating-controls" aria-label="Brush controls"><label class="ub-floating-slider">size <input id="brush-size" type="range" min="0" max="0.5" step="0.001" value="0.14"></label> <label class="ub-floating-slider">opacity <input id="brush-opacity" type="range" min="0" max="1" step="0.01" value="1"></label></aside><aside id="layer-panel" class="ub-layer-panel" aria-label="Layer controls"><div class="ub-layer-actions"><button id="layer-add" type="button">+</button> <button id="layer-duplicate" type="button">dup</button> <button id="layer-delete" type="button">del</button> <button id="layer-up" type="button">up</button> <button id="layer-down" type="button">down</button></div><input id="layer-name" class="ub-layer-name" value="Layer 1"><div class="ub-layer-properties"><button id="layer-visible" type="button">show</button> <button id="layer-lock" type="button">lock</button> <button id="layer-alpha-lock" type="button">alpha</button> <select id="layer-blend"><option value="normal">normal</option><option value="multiply">multiply</option><option value="screen">screen</option><option value="add">add</option><option value="max">max</option></select></div><input id="layer-opacity" class="ub-layer-opacity" type="range" min="0" max="1" step="0.01" value="1"><div id="layer-list" class="ub-layer-list"></div><div id="layer-cache" class="ub-layer-cache"></div></aside></main></div></body></html>
+    }</style><script defer="defer" src="tiledIpad3.bundle.js"></script></head><body><div id="app"><main class="ub-ipad-app"><section class="ub-stage"><canvas id="gl"></canvas><canvas id="grid"></canvas></section><div id="stats-panel" class="ub-stats-panel"></div><nav class="ub-topbar" aria-label="Tiled iPad 3 controls"><button id="undo" type="button" disabled="disabled">undo</button> <button id="redo" type="button" disabled="disabled">redo</button> <button id="layer-toggle" type="button">layers on</button> <button id="fill-mode" type="button">fill off</button> <label>brush <select id="brush"></select></label> <label>tiles <select id="tile-count"><option value="1">1</option><option value="4">4</option><option value="9">9</option><option value="16" selected="selected">16</option><option value="64">64</option><option value="256">256</option></select></label> <label>color <input id="color" type="color" value="#1f1f1f"></label> <button id="dry" type="button">dry</button> <button id="debug-tile" type="button">debug off</button> <button id="clear" type="button">clear</button></nav><aside class="ub-floating-controls" aria-label="Brush controls"><label class="ub-floating-slider">size <input id="brush-size" type="range" min="0" max="0.5" step="0.001" value="0.14"></label> <label class="ub-floating-slider">opacity <input id="brush-opacity" type="range" min="0" max="1" step="0.01" value="1"></label></aside><button id="fit-view" class="ub-fit-button hidden" type="button">fit</button><aside id="layer-panel" class="ub-layer-panel" aria-label="Layer controls"><div class="ub-layer-actions"><button id="layer-add" type="button">+</button> <button id="layer-duplicate" type="button">dup</button> <button id="layer-delete" type="button">del</button> <button id="layer-up" type="button">up</button> <button id="layer-down" type="button">down</button></div><input id="layer-name" class="ub-layer-name" value="Layer 1"><div class="ub-layer-properties"><button id="layer-visible" type="button">show</button> <button id="layer-lock" type="button">lock</button> <button id="layer-alpha-lock" type="button">alpha</button> <select id="layer-blend"><option value="normal">normal</option><option value="multiply">multiply</option><option value="screen">screen</option><option value="add">add</option><option value="max">max</option></select></div><input id="layer-opacity" class="ub-layer-opacity" type="range" min="0" max="1" step="0.01" value="1"><div id="layer-list" class="ub-layer-list"></div><div id="layer-cache" class="ub-layer-cache"></div></aside></main></div></body></html>
